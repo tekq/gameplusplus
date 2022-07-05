@@ -3,70 +3,73 @@
 
 using namespace std;
 
-const int map_x = 30;
-const int map_y = 30;
+const int map_size = 237;
+const int map_max_y = 50;
 
-int pos[map_x][map_y];
+int pos[map_size][map_size];
 
 int x = 0, y = 0;
 
 #define RESET   "\033[0m"
 #define RED     "\033[1;31m"
+#define BLACK   "\033[1m\033[30m"
+#define BLUE    "\033[34m"
 
 void move(char direction) {
-    for (int i = 0; i < map_x; i++) {
-        for (int j = 0; j < map_y; j++) {
-            if (pos[j][i] == 0) {
-                x = j;
+    for (int i = 0; i < map_size; i++) {
+        for (int j = 0; j < map_size; j++) {
+            if (pos[j][i] == 1) {
                 y = i;
+                x = j;
             }
         }
     }
 
     if (direction == 'd') {
-        if (y == map_y - 1) {
+        if (y == map_max_y - 1) {
             cout << "Can't go down" << endl;
         } else {
-            pos[x][y] = 1;
-            pos[x][y + 1] = 0;
+            pos[x][y] = 0;
+            pos[x][y + 1] = 1;
         }
     } else if (direction == 'u') {
         if (y == 0) {
             cout << "Can't go up" << endl;
         } else {
-            pos[x][y] = 1;
-            pos[x][y - 1] = 0;
+            pos[x][y] = 0;
+            pos[x][y - 1] = 1;
         }
     } else if (direction == 'l') {
         if (x == 0) {
             cout << "Can't go left" << endl;
         } else {
-            pos[x][y] = 1;
-            pos[x - 1][y] = 0;
+            pos[x][y] = 0;
+            pos[x - 1][y] = 1;
         }
     } else if (direction == 'r') {
-        if (x == map_x - 1) {
+        if (x == map_size - 1) {
             cout << "Can't go right" << endl;
         } else {
-            pos[x][y] = 1;
-            pos[x + 1][y] = 0;
+            pos[x][y] = 0;
+            pos[x + 1][y] = 1;
         }
     }
 }
 
 void print() {
-    for (int i = 0; i < map_x; i++) {
-        for (int j = 0; j < map_y; j++) {
-            if (pos[j][i] == 0) {
-                cout << RED << pos[j][i] << " " << RESET;
+    int i, j = 0;
+
+    for (i = 0; i < map_max_y; i++) {
+        for (j = 0; j < map_size; j++) {
+            if (pos[j][i] == 1) {
+                cout << RED << "X" << RESET;
             } else {
-                cout << pos[j][i] << " ";
+                cout << "x";
             }
         }
         cout << endl;
     }
-    cout << "\n\n\n\n\n";
-
+    cout << "\n\n\n";
 }
 
 void clear() {
@@ -106,26 +109,7 @@ void game_control() {
 }
 
 int main() {
-    cout << "Some random game lmao" << endl;
-    cout << " - The Epic Game -" << endl;
-    cout << " - By: Some Random Person -" << endl;
-
-    cout << endl;
-
-    cout << "Press any key to start" << endl;
-
-    _getche();
-
-    for (int i = 0; i < map_x; i++) { // set the map to 1s(better readability)
-        for (int j = 0; j < map_y; j++) {
-            pos[i][j] = 1;
-        }
-    }
-
-    pos[map_x / 2][map_y / 2] = 0;
-
-    clear();
-
+    pos[map_size / 2][map_max_y / 2] = 1;
 
     game_control();
 }
