@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.22)
-project(game)
+project(game_attempt5)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(game main.cpp)
+add_executable(game_attempt5 main.cpp)

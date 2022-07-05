@@ -1,178 +1,132 @@
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
+#include <conio.h>
 
 using namespace std;
 
-char pos[3][3];
+const int map_x = 30;
+const int map_y = 30;
 
-void right() {
-    for (int i = 0; i < 5; ++i) {
-        if (pos[i][0] == 'x') {
-            pos[i][0] = 'o';
-            pos[i + 1][0] = 'x';
-            break;
-        } else if (pos[i][1] == 'x') {
-            pos[i][1] = 'o';
-            pos[i + 1][1] = 'x';
-            break;
-        } else if (pos [i][2] == 'x') {
-            pos[i][2] = 'o';
-            pos[i + 1][2] = 'x';
-            break;
-        } else if (pos [i][3] == 'x') {
-            pos[i][3] = 'o';
-            pos[i + 1][3] = 'x';
-            break;
-        } else if (pos [i][4] == 'x') {
-            pos[i][4] = 'o';
-            pos[i + 1][4] = 'x';
-            break;
+int pos[map_x][map_y];
+
+int x = 0, y = 0;
+
+#define RESET   "\033[0m"
+#define RED     "\033[1;31m"
+
+void move(char direction) {
+    for (int i = 0; i < map_x; i++) {
+        for (int j = 0; j < map_y; j++) {
+            if (pos[j][i] == 0) {
+                x = j;
+                y = i;
+            }
+        }
+    }
+
+    if (direction == 'd') {
+        if (y == map_y - 1) {
+            cout << "Can't go down" << endl;
+        } else {
+            pos[x][y] = 1;
+            pos[x][y + 1] = 0;
+        }
+    } else if (direction == 'u') {
+        if (y == 0) {
+            cout << "Can't go up" << endl;
+        } else {
+            pos[x][y] = 1;
+            pos[x][y - 1] = 0;
+        }
+    } else if (direction == 'l') {
+        if (x == 0) {
+            cout << "Can't go left" << endl;
+        } else {
+            pos[x][y] = 1;
+            pos[x - 1][y] = 0;
+        }
+    } else if (direction == 'r') {
+        if (x == map_x - 1) {
+            cout << "Can't go right" << endl;
+        } else {
+            pos[x][y] = 1;
+            pos[x + 1][y] = 0;
         }
     }
 }
 
+void print() {
+    for (int i = 0; i < map_x; i++) {
+        for (int j = 0; j < map_y; j++) {
+            if (pos[j][i] == 0) {
+                cout << RED << pos[j][i] << " " << RESET;
+            } else {
+                cout << pos[j][i] << " ";
+            }
+        }
+        cout << endl;
+    }
+    cout << "\n\n\n\n\n";
 
-void left() {
-    for (int i = 0; i < 5; ++i) {
-        if (pos[i][0] == 'x') {
-            pos[i][0] = 'o';
-            pos[i - 1][0] = 'x';
+}
+
+void clear() {
+    cout << string(100, '\n');
+}
+
+void game_control() {
+    while (1) {
+        print();
+        char input;
+        input = _getche();
+
+        if (input == 'q') { // quit game (CTRL+C doesn't work)
             break;
-        } else if (pos[i][1] == 'x') {
-            pos[i][1] = 'o';
-            pos[i - 1][1] = 'x';
-            break;
-        } else if (pos [i][2] == 'x') {
-            pos[i][2] = 'o';
-            pos[i - 1][2] = 'x';
-            break;
-        } else if (pos [i][3] == 'x') {
-            pos[i][3] = 'o';
-            pos[i - 1][3] = 'x';
-            break;
-        } else if (pos [i][4] == 'x') {
-            pos[i][4] = 'o';
-            pos[i - 1][4] = 'x';
-            break;
+        } else if (input == 'w') { // move up
+            move('u');
+            clear();
+        } else if (input == 'a') { // move left
+            move('l');
+            clear();
+        } else if (input == 'd') { // move right
+            move('r');
+            clear();
+        } else if (input == 's') { // move down
+            move('d');
+            clear();
+        } else if (input == 'i') {
+            clear();
+            cout << "feature not implemented yet :(" << endl;
+            cout << endl;
+        } else {
+            clear();
+            cout << "Invalid input" << endl;
+            cout << endl;
         }
     }
-
-}
-
-void up() {
-    for (int i = 0; i < 5; ++i) {
-        if (pos[0][i] == 'x') {
-            pos[0][i] = 'o';
-            pos[0][i - 1] = 'x';
-            break;
-        } else if (pos[1][i] == 'x') {
-            pos[1][i] = 'o';
-            pos[1][i - 1] = 'x';
-            break;
-        } else if (pos [2][i] == 'x') {
-            pos[2][i] = 'o';
-            pos[2][i - 1] = 'x';
-            break;
-        } else if (pos [3][i] == 'x') {
-            pos[3][i] = 'o';
-            pos[3][i - 1] = 'x';
-            break;
-        } else if (pos [4][i] == 'x') {
-            pos[4][i] = 'o';
-            pos[4][i - 1] = 'x';
-            break;
-        }
-    }
-
-}
-
-void down() {
-    for (int i = 0; i < 5; ++i) {
-        if (pos[0][i] == 'x') {
-            pos[0][i] = 'o';
-            pos[0][i + 1] = 'x';
-            break;
-        } else if (pos[1][i] == 'x') {
-            pos[1][i] = 'o';
-            pos[1][i + 1] = 'x';
-            break;
-        } else if (pos [2][i] == 'x') {
-            pos[2][i] = 'o';
-            pos[2][i + 1] = 'x';
-            break;
-        } else if (pos [3][i] == 'x') {
-            pos[3][i] = 'o';
-            pos[3][i + 1] = 'x';
-            break;
-        } else if (pos [4][i] == 'x') {
-            pos[4][i] = 'o';
-            pos[4][i + 1] = 'x';
-            break;
-        }
-    }
-
-}
-
-void shoot(int bullet_y) {
-    cout << "Bullet y: " << bullet_y << "\n";
-}
-
-void display() {
-    cout << pos[0][0] << " " << pos[1][0] << " " << pos[2][0] << " " << pos[3][0] << " " << pos[4][0];
-
-    cout << "\n";
-
-    cout << pos[0][1] << " " << pos[1][1] << " " << pos[2][1] << " " << pos[3][1] << " " << pos[4][1];
-
-    cout << "\n";
-
-    cout << pos[0][2] << " " << pos[1][2] << " " << pos[2][2] << " " << pos[3][2] << " " << pos[4][2];
-
-    cout << "\n";
-
-    cout << pos[0][3] << " " << pos[1][3] << " " << pos[2][3] << " " << pos[3][3] << " " << pos[4][3];
-
-    cout << "\n";
-
-    cout << pos[0][4] << " " << pos[1][4] << " " << pos[2][4] << " " << pos[3][4] << " " << pos[4][4];
-
-    cout << "\n";
 }
 
 int main() {
-    bool game_act = true;
+    cout << "Some random game lmao" << endl;
+    cout << " - The Epic Game -" << endl;
+    cout << " - By: Some Random Person -" << endl;
 
-    char move;
+    cout << endl;
 
+    cout << "Press any key to start" << endl;
 
-    for (int i = 0; i <= 4; ++i) {
-        for (int j = 0; j <= 4; ++j) {
-            pos[i][j] = 'o';
+    _getche();
+
+    for (int i = 0; i < map_x; i++) { // set the map to 1s(better readability)
+        for (int j = 0; j < map_y; j++) {
+            pos[i][j] = 1;
         }
     }
 
-    pos[0][0] = 'x';
+    pos[map_x / 2][map_y / 2] = 0;
 
-    while (game_act) {
-        display();
+    clear();
 
-        cin >> move;
 
-        if (move == 'd') {
-            right();
-        } else if (move == 'a') {
-            left();
-        } else if (move == 'w') {
-            up();
-        } else if (move == 's') {
-            down();
-        }
-
-//        srand(static_cast <unsigned int> (time(0)));
-        shoot(rand()%(4-0 + 1) + 0);
-
+    game_control();
 }
 
-    return 0;
-}
