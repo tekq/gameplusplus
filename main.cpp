@@ -6,19 +6,26 @@ using namespace std;
 const int map_size = 237;
 const int map_max_y = 50;
 
-int pos[map_size][map_size];
+int map[map_size][map_size];
 
 int x = 0, y = 0;
+
+int npc_count = 0;
 
 #define RESET   "\033[0m"
 #define RED     "\033[1;31m"
 #define BLACK   "\033[1m\033[30m"
 #define BLUE    "\033[34m"
 
+void create_npc(int pos_x, int pos_y, string npc_type) {
+    map[pos_x][pos_y] = 2;
+    npc_count++;
+}
+
 void move(char direction) {
     for (int i = 0; i < map_size; i++) {
         for (int j = 0; j < map_size; j++) {
-            if (pos[j][i] == 1) {
+            if (map[j][i] == 1) {
                 y = i;
                 x = j;
             }
@@ -28,30 +35,38 @@ void move(char direction) {
     if (direction == 'd') {
         if (y == map_max_y - 1) {
             cout << "Can't go down" << endl;
+        } else if (map[x][y + 1] == 2) {
+            // npc
         } else {
-            pos[x][y] = 0;
-            pos[x][y + 1] = 1;
+            map[x][y] = 0;
+            map[x][y + 1] = 1;
         }
     } else if (direction == 'u') {
         if (y == 0) {
             cout << "Can't go up" << endl;
+        } else if (map[x][y - 1] == 2) {
+
         } else {
-            pos[x][y] = 0;
-            pos[x][y - 1] = 1;
+            map[x][y] = 0;
+            map[x][y - 1] = 1;
         }
     } else if (direction == 'l') {
         if (x == 0) {
             cout << "Can't go left" << endl;
+        } else if (map[x - 1][y] == 2) {
+            // npc
         } else {
-            pos[x][y] = 0;
-            pos[x - 1][y] = 1;
+            map[x][y] = 0;
+            map[x - 1][y] = 1;
         }
     } else if (direction == 'r') {
         if (x == map_size - 1) {
             cout << "Can't go right" << endl;
+        } else if (map[x + 1][y] == 2) {
+            // npc
         } else {
-            pos[x][y] = 0;
-            pos[x + 1][y] = 1;
+            map[x][y] = 0;
+            map[x + 1][y] = 1;
         }
     }
 }
@@ -61,15 +76,21 @@ void print() {
 
     for (i = 0; i < map_max_y; i++) {
         for (j = 0; j < map_size; j++) {
-            if (pos[j][i] == 1) {
-                cout << RED << "X" << RESET;
+            if (map[j][i] == 1) {
+                cout << RED << "O" << RESET;
+            } else if (map[j][i] == 2) { // npc
+                cout << BLUE << "O" << RESET;
             } else {
                 cout << "x";
             }
         }
         cout << endl;
     }
-    cout << "\n\n\n";
+
+    cout << "x: " << x << " y: " << y << endl;
+
+    cout << "NPCs: " << npc_count << endl;
+//    cout << "\n\n\n";
 }
 
 void clear() {
@@ -109,7 +130,9 @@ void game_control() {
 }
 
 int main() {
-    pos[map_size / 2][map_max_y / 2] = 1;
+    map[map_size / 2][map_max_y / 2] = 1;
+
+    create_npc(10, 10, "Trader");
 
     game_control();
 }
